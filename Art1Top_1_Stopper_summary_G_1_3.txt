@@ -1,0 +1,41 @@
+=================================================================
+  Art1Top_1_Stopper_build123d.py
+  Started : 2026-04-23 11:51:35
+=================================================================
+
+-> [G1] Reading S1 (Fusion_Coordinates_S1.csv) ...
+   → Circle centre  = (56.9998, 0.0000, 6.3000)
+   → Circle radius  = 4.6002 mm
+   → Sketch plane Z = 6.3000 mm
+   → Chord line Y = -1.5000  [(61.349,-1.500) → (52.651,-1.500)]
+   → Chord line Y = 1.5000  [(52.651,1.500) → (61.349,1.500)]
+   → Region A (strip) : Y ∈ [-1.500, 1.500] ∩ circle
+   → Region B (arc)   : Y > 1.500 ∩ circle
+   → Region C (arc)   : Y < -1.500 ∩ circle
+--- [G1] Complete ✓ ---
+
+-> [G2] Building extrusions ...
+   → Extruding full disc (A+B+C) by 1.2 mm in -Z ...
+   ✓ Base disc volume = 79.7770 mm³
+   → Extruding Region A (strip Y=[-1.5,1.5]) by 1.0 mm in +Z ...
+   ✓ Strip (Region A) volume = 27.1038 mm³
+   ✓ Combined solid volume   = 106.8807 mm³
+--- [G2] Complete ✓ ---
+
+=================================================================
+  [G3]  PRE-EXPORT CHECKS & STL/STEP EXPORT
+=================================================================
+
+-> [G3] Watertight check ...
+   Faces in solid : 7
+   Free edges     : 0
+   🟢 SUCCESS: Mesh is watertight!
+
+   Final volume = 106.8807 mm³
+   ✓ STL saved  : Art1Top_1_Stopper_G_1_3.stl  (51.1 KB)
+   ✓ STEP saved : Art1Top_1_Stopper_G_1_3.step  (19.8 KB)
+
+=================================================================
+  BUILD COMPLETE — G1 through G3
+  Finished : 2026-04-23 11:51:36  (0.3 s)
+=================================================================

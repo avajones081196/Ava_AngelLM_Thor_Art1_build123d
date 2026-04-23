@@ -1,0 +1,16 @@
+============================================================
+0_preprocess_csvs.py  Execution Log
+Time: 2026-04-23 11:06:51
+============================================================
+
+Found 1 CSV file(s) in input folder.
+
+SKIPPED  S1: already in csv_merged — not reprocessed.
+
+============================================================
+SUMMARY
+============================================================
+  Shapes skipped (already merged) : 1
+  New shapes written              : 0
+  Duplicate rows removed (total)  : 0
+============================================================

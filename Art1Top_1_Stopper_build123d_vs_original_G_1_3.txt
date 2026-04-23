@@ -1,0 +1,93 @@
+
+███████████████████████████████████████████████████████████
+  STL COMPARISON: Build123d  vs  Fusion 360 Original
+  Run time  : 2026-04-23  11:54:10
+███████████████████████████████████████████████████████████
+  Build123d : Art1Top_1_Stopper_G_1_3.stl
+  Original  : Art1Top_1_Stopper_original.stl
+  Report    : Art1Top_1_Stopper_build123d_vs_original_G_1_3.txt
+
+  =========================================================
+  Build123d STL
+
+  =========================================================
+  File           : Art1Top_1_Stopper_G_1_3.stl
+  Triangles      : 1,044  (more = finer mesh = less approx error)
+  Volume         : 106.8725 mm³
+  Center of mass : (57.000, 0.000, 5.979) mm
+  X range        : 52.3997 → 61.6000 mm
+  Y range        : -4.6002 → 4.6002 mm
+  Z range        : 5.1000 → 7.3000 mm
+
+  =========================================================
+  Fusion 360 Original STL
+
+  =========================================================
+  File           : Art1Top_1_Stopper_original.stl
+  Triangles      : 928  (more = finer mesh = less approx error)
+  Volume         : 106.8644 mm³
+  Center of mass : (57.000, 0.000, 5.979) mm
+  X range        : 52.4004 → 61.6000 mm
+  Y range        : -4.5999 → 4.5999 mm
+  Z range        : 5.1000 → 7.3000 mm
+
+  =========================================================
+  VOLUME COMPARISON
+
+  =========================================================
+  Metric                                   Value  Unit
+  ---------------------------------------------------------
+  Build123d volume                      106.8725  mm³
+  Fusion volume (reference)             106.8644  mm³
+  Absolute difference                    +0.0082  mm³  (build123d larger)
+  % error vs original                     0.0076  %
+  Rating                         🟢 EXCELLENT
+
+  =========================================================
+  SYMMETRIC DIFFERENCE  (spatial overlap quality)
+
+  =========================================================
+  Mesh A watertight : True
+  Mesh B watertight : True
+
+  Metric                                     Value  Unit
+  ---------------------------------------------------------
+  Volume A (Build123d)                    106.8725  mm³
+  Volume B (Fusion original)              106.8644  mm³
+  Intersection volume                     106.8639  mm³
+  Overlap coverage (inter/Fusion)          99.9995  %
+  ---------------------------------------------------------
+  Symmetric diff volume                     0.0092  mm³
+  Sym diff % of Fusion volume               0.0086  %
+  Rating                              🟢 EXCELLENT
+
+  =========================================================
+  BOUNDING BOX COMPARISON  (tolerance ±0.1 mm per axis)
+
+  =========================================================
+  Axis      Build123d       Fusion    Diff mm    % err  Status
+  -----------------------------------------------------------------
+  X min       52.3997      52.4004    -0.0007   0.008%  ✅ pass
+  X max       61.6000      61.6000    +0.0000   0.000%  ✅ pass
+  Y min       -4.6002      -4.5999    -0.0003   0.003%  ✅ pass
+  Y max        4.6002       4.5999    +0.0003   0.003%  ✅ pass
+  Z min        5.1000       5.1000    +0.0000   0.000%  ✅ pass
+  Z max        7.3000       7.3000    +0.0000   0.000%  ✅ pass
+
+  Overall bounding box : ✅ PASS
+
+  █████████████████████████████████████████████████████████
+  SUMMARY SCORECARD
+
+  █████████████████████████████████████████████████████████
+  Check                                    Score   Rating
+  -----------------------------------------------------------------
+  Volume % error                          0.008%   🟢 EXCELLENT
+  Symmetric diff % error                  0.009%   🟢 EXCELLENT
+  Overlap coverage                       100.00%   🟢 EXCELLENT
+  Bounding box                              PASS   ✅
+
+  █████████████████████████████████████████████████████████
+
+  Report saved → /Users/avajones/Documents/ava_build123d/20260422_assign/Art1Top_1_Stopper/Art1Top_1_Stopper_build123d_vs_original_G_1_3.txt
+

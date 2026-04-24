@@ -14,11 +14,103 @@ The goal: prove that every part can be rebuilt to **near-perfect geometric accur
 
 ## ✅ Parts Completed
 
-| # | Part | Volume (mm³) | Vol Error | Sym Diff | Bounding Box | Rating |
-|---|------|-------------|-----------|----------|-------------|--------|
-| 1 | `Art1Top_1_Stopper` | 106.8725 | 0.008% | 0.009% | ✅ PASS | 🟢 EXCELLENT |
+| # | Part | Volume (mm³) | Vol Error | Sym Diff | Bounding Box | Time | Rating |
+|---|------|-------------|-----------|----------|-------------|------|--------|
+| 1 | `Art1Top_1_Stopper` | 106.8725 | 0.008% | 0.009% | ✅ PASS | — | 🟢 EXCELLENT |
+| 2 | `Art1Top_Splitted_A` | 107,906.06 | 0.023% | 0.030% | ✅ PASS | 3.5 hrs | 🟢 EXCELLENT |
 
-> More parts in progress — `Art1Top_Splitted_A`, and others to follow.
+### 🔄 In Progress
+
+| # | Part | Status |
+|---|------|--------|
+| 3 | `Art1Top_Splitted_B` | 🔧 In progress |
+
+---
+
+## 📊 Art1Top_Splitted_A — Detailed Results
+
+### What the part looks like
+
+A large annular disc (inner radius 25 mm, outer radius 75 mm) with multiple features:
+
+- **6 countersink holes** on a 30 mm bolt circle (counterbore + through-bore)
+- **4 rectangular bosses** with side holes, pentagon slots, and wedge extrusions (mirrored in 4 quadrants)
+- **Tilted hex + circle cuts** on 45° angled faces
+- **Curved cutout profiles** at wedge bases
+- **Bottom-face pocket** (circle cut from Z=0)
+
+### Guidelines breakdown (20 guidelines, G1–G20)
+
+| Guideline | Description | CSV |
+|-----------|-------------|-----|
+| G1–G3 | Annular ring (inner/outer circles, extrude −5 mm) | S1 |
+| G4–G6 | Countersink holes × 6 (counterbore +3, through-bore −2, circular pattern) | S2 |
+| G7–G8 | Rectangular boss (10×23 mm, extrude +15 mm) | S3 |
+| G9–G10 | Side hole through rectangular boss | S4 |
+| G11–G12 | Wedge profile extrusions (triangle +13, polygon +5) | S5 |
+| G12_2–G12_3 | Curved cutout at wedge base (+30 mm cut) | S9 |
+| G13–G14 | Hexagon + circle cut on 45° tilted plane | S6 |
+| G15–G16 | Pentagon slot cut (±1.5 mm symmetric) | S7 |
+| G17 | Mirror G7–G16 across YZ plane (X → −X) | — |
+| G18 | Mirror G7–G17 across XZ plane (Y → −Y) | — |
+| G19–G20 | Bottom-face circle pocket (r=5 mm, 2 mm deep) | S8 |
+
+### Comparison scorecard
+
+```
+███████████████████████████████████████████████████████████
+  STL COMPARISON: Build123d  vs  Fusion 360 Original
+███████████████████████████████████████████████████████████
+
+  Build123d volume    : 107,906.06 mm³
+  Fusion 360 volume   : 107,931.29 mm³
+  Absolute difference :    −25.23 mm³
+  % error             :     0.023%      🟢 EXCELLENT
+
+  Symmetric diff      :     32.88 mm³
+  Sym diff %          :     0.030%      🟢 EXCELLENT
+  Overlap coverage    :    99.973%      🟢 EXCELLENT
+
+  Bounding box        : ✅ ALL 6 AXES PASS  (max deviation 0.022 mm)
+
+  ─────────────────────────────────────────────────────────
+  SUMMARY SCORECARD
+  ─────────────────────────────────────────────────────────
+  Volume % error          0.023%   🟢 EXCELLENT
+  Symmetric diff % error  0.030%   🟢 EXCELLENT
+  Overlap coverage       99.97%    🟢 EXCELLENT
+  Bounding box             PASS    ✅
+```
+
+---
+
+## 📊 Art1Top_1_Stopper — Detailed Results
+
+### What the part looks like
+
+A circular disc (radius ≈ 4.4 mm) with a raised central strip — two parallel chord lines inside the circle divide it into three regions:
+
+```
+        ╭─────────────────╮
+        │   Region B (arc)│   ← flat
+        ├─────────────────┤   ← chord at Y = +1.5
+        │   Region A      │   ← raised +1.0 mm (the "stopper" ridge)
+        ├─────────────────┤   ← chord at Y = -1.5
+        │   Region C (arc)│   ← flat
+        ╰─────────────────╯
+```
+
+### Comparison scorecard
+
+```
+  Build123d volume    : 106.8725 mm³
+  Fusion 360 volume   : 106.8644 mm³
+  % error             :   0.008%       🟢 EXCELLENT
+
+  Symmetric diff %    :   0.009%       🟢 EXCELLENT
+  Overlap coverage    :  99.9995%      🟢 EXCELLENT
+  Bounding box        : ✅ ALL 6 AXES PASS  (max deviation 0.0007 mm)
+```
 
 ---
 
@@ -28,19 +120,28 @@ Each part lives in its own folder under `20260422_assign/`:
 
 ```
 20260422_assign/
-└── Art1Top_1_Stopper/
-    ├── csv_data_Art1Top_1_Stopper/        ← Raw Fusion 360 coordinate exports
-    │   └── Fusion_Coordinates_S1.csv
-    ├── csv_merged/                        ← Cleaned & deduplicated CSVs
-    │   └── Fusion_Coordinates_S1.csv
-    ├── 0_preprocess_csvs.py               ← Step 1: Clean & merge raw CSVs
-    ├── Art1Top_1_Stopper_build123d.py     ← Step 2: Build the part
-    ├── Art1Top_1_Stopper_compare_stl_files.py  ← Step 3: Compare vs original
-    ├── Art1Top_1_Stopper_G_1_3.stl        ← Output: built STL
-    ├── Art1Top_1_Stopper_G_1_3.step       ← Output: built STEP
-    ├── Art1Top_1_Stopper_original.stl     ← Reference: Fusion 360 original
-    ├── Art1Top_1_Stopper_summary_G_1_3.txt        ← Build log
-    └── Art1Top_1_Stopper_build123d_vs_original_G_1_3.txt  ← Comparison report
+├── Art1Top_1_Stopper/
+│   ├── csv_data_Art1Top_1_Stopper/        ← Raw Fusion 360 coordinate exports
+│   ├── csv_merged/                        ← Cleaned & deduplicated CSVs
+│   ├── 0_preprocess_csvs.py               ← Step 1: Clean & merge raw CSVs
+│   ├── Art1Top_1_Stopper_build123d.py     ← Step 2: Build the part
+│   ├── Art1Top_1_Stopper_compare_stl_files.py  ← Step 3: Compare vs original
+│   ├── Art1Top_1_Stopper_G_1_3.stl        ← Output: built STL
+│   ├── Art1Top_1_Stopper_G_1_3.step       ← Output: built STEP
+│   ├── Art1Top_1_Stopper_original.stl     ← Reference: Fusion 360 original
+│   └── Art1Top_1_Stopper_summary_G_1_3.txt
+│
+└── Art1Top_Splitted_A/
+    ├── csv_data_Art1Top_Splitted_A/
+    ├── csv_merged/                        ← S1–S9 cleaned CSVs
+    ├── 0_preprocess_csvs.py
+    ├── Art1Top_Splitted_A_build123d.py    ← 20 guidelines (G1–G20)
+    ├── Art1Top_Splitted_A_compare_stl_files.py
+    ├── Art1Top_Splitted_A_G_1_20.stl
+    ├── Art1Top_Splitted_A_G_1_20.step
+    ├── Art1Top_Splitted_A_original.stl
+    ├── Art1Top_Splitted_A_summary_G_1_20.txt
+    └── Art1Top_Splitted_A_build123d_vs_original_G_1_20.txt
 ```
 
 ---
@@ -82,14 +183,14 @@ Rebuilds the part using [build123d](https://github.com/gumyr/build123d). Each sc
 | Guideline | Always means |
 |-----------|-------------|
 | **G1** | Read CSV(s), extract geometry (circles, lines, polygons) |
-| **G2–Gn** | Perform extrusions, cuts, sweeps, patterns etc. |
-| **G3** | Always last — `clean()` → watertight check → export STL + STEP → write summary |
+| **G2–Gn** | Perform extrusions, cuts, sweeps, patterns, mirrors etc. |
+| **Last G** | Always last — `clean()` → watertight check → export STL + STEP → write summary |
 
 **File naming convention:**
 ```
-PartName_G_1_3.stl          ← STL output
-PartName_G_1_3.step         ← STEP output
-PartName_summary_G_1_3.txt  ← Build log
+PartName_G_1_N.stl          ← STL output  (N = last guideline number)
+PartName_G_1_N.step         ← STEP output
+PartName_summary_G_1_N.txt  ← Build log
 ```
 
 **The magic line** — always applied before export to remove accumulated geometric scars:
@@ -111,48 +212,6 @@ Compares the built STL against the original Fusion 360 STL across four metrics:
 | **Bounding box** | Whether all 6 axis extents match within ±0.1 mm |
 
 Ratings: 🟢 EXCELLENT / 🟡 GOOD / 🟠 ACCEPTABLE / 🔴 POOR
-
----
-
-## 📊 Art1Top_1_Stopper — Detailed Results
-
-### What the part looks like
-
-A circular disc (radius ≈ 4.4 mm) with a raised central strip — two parallel chord lines inside the circle divide it into three regions:
-
-```
-        ╭─────────────────╮
-        │   Region B (arc)│   ← flat
-        ├─────────────────┤   ← chord at Y = +1.5
-        │   Region A      │   ← raised +1.0 mm (the "stopper" ridge)
-        ├─────────────────┤   ← chord at Y = -1.5
-        │   Region C (arc)│   ← flat
-        ╰─────────────────╯
-```
-
-Extruded:
-- **Full disc (A+B+C)**: 1.2 mm downward (−Z)
-- **Strip (Region A only)**: additional 1.0 mm upward (+Z)
-
-### Comparison scorecard
-
-```
-███████████████████████████████████████████████████████████
-  STL COMPARISON: Build123d  vs  Fusion 360 Original
-███████████████████████████████████████████████████████████
-
-  Build123d volume    : 106.8725 mm³
-  Fusion 360 volume   : 106.8644 mm³
-  Absolute difference :  +0.0082 mm³
-  % error             :   0.008%       🟢 EXCELLENT
-
-  Symmetric diff      :   0.0092 mm³
-  Sym diff %          :   0.009%       🟢 EXCELLENT
-  Overlap coverage    :  99.9995%      🟢 EXCELLENT
-
-  Bounding box        : ✅ ALL 6 AXES PASS  (max deviation 0.0007 mm)
-  Centre of mass      : (57.000, 0.000, 5.979) mm  ← IDENTICAL
-```
 
 ---
 
@@ -186,35 +245,47 @@ Now you can just type `buildenv` to activate.
 
 ## 🚀 Running a Part (Master Startup Checklist)
 
-```bash
-# Step 1 — Activate environment
-buildenv
+### 🔧 One-Time Per Project Folder
 
-# Step 2 — Navigate to part folder
-cd ~/Documents/ava_build123d/20260422_assign/Art1Top_1_Stopper
+1. **Open project folder** in VS Code: `File` → `Open Folder`
+2. **Lock the interpreter:**
+   ```bash
+   mkdir -p .vscode && cat > .vscode/settings.json << 'EOF'
+   {
+       "python.defaultInterpreterPath": "/Users/avajones/Documents/ava_build123d/build123d_master_env/bin/python"
+   }
+   EOF
+   ```
 
-# Step 3 — Set VS Code Python interpreter (once per project folder)
-# Cmd+Shift+P → "Python: Select Interpreter"
-# → ~/Documents/ava_build123d/build123d_master_env/bin/python3
+### ▶️ Every Session
 
-# Step 4 — Start OCP viewer server (Terminal tab 1 — leave running)
-python -m ocp_vscode
-
-# Step 5 — Open second terminal tab, activate env again
-buildenv
-cd ~/Documents/ava_build123d/20260422_assign/Art1Top_1_Stopper
-
-# Step 6 — Preprocess CSVs
-python 0_preprocess_csvs.py
-
-# Step 7 — Build the part
-python Art1Top_1_Stopper_build123d.py
-
-# Step 8 — Compare against original
-python Art1Top_1_Stopper_compare_stl_files.py
-```
+3. **Open OCP viewer:** `Cmd+Shift+P` → `OCP CAD Viewer: Open Viewer`
+   - If interpreter prompt appears → click `yes` → pick `build123d_master_env`
+4. **Check port:** read bottom-right corner `OCP: XXXX` — match in script's `set_port(XXXX)`
+5. **Tab 2 — run scripts:**
+   ```bash
+   buildenv
+   cd ~/Documents/ava_build123d/20260422_assign/PartName
+   python 0_preprocess_csvs.py
+   python PartName_build123d.py
+   python PartName_compare_stl_files.py
+   ```
 
 > **Port note:** OCP viewer on this machine runs on port **3940**. All scripts use `set_port(3940)`.
+
+---
+
+## 🐛 Known Gotchas
+
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| `Connection refused Errno 61` | OCP server not running | Open OCP viewer panel before running script |
+| Geometry not showing | Script port ≠ viewer port | Match `set_port()` to bottom-right `OCP: XXXX` |
+| Script runs old version | Unsaved file (● dot on tab) | `Cmd+S` — confirm dot disappears |
+| `No module named ocp_vscode` | VS Code using wrong Python | Run `.vscode/settings.json` fix once per folder |
+| `Location()` on `Plane.YZ` misplaced | `Location` uses **global** coords, not local | Use `Location((0, Y, Z))` not `Location((Y, Z, 0))` |
+| Thin surface artifact on cuts | Sketch plane sits exactly on body face | Use `both=True` to cut in both directions |
+| `Location` context manager error | `with Location(...)` not supported | Use `Plane.move(Location(...))` instead |
 
 ---
 
@@ -233,9 +304,9 @@ rtree
 
 ## 🗺️ Roadmap
 
-- [x] `Art1Top_1_Stopper`
-- [ ] `Art1Top_Splitted_A`
-- [ ] `Art1Top_Splitted_B`
+- [x] `Art1Top_1_Stopper` — 🟢 EXCELLENT (0.008% vol error)
+- [x] `Art1Top_Splitted_A` — 🟢 EXCELLENT (0.023% vol error) — 3.5 hrs
+- [ ] `Art1Top_Splitted_B` — 🔧 In progress
 - [ ] More Art1 parts...
 - [ ] Art2, Art3, Art4, Art5, Art6 parts
 

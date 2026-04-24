@@ -1,0 +1,58 @@
+============================================================
+Summary  :  Art1Top_Splitted_A_summary_G_1_20
+Guidelines covered: G1–G20
+============================================================
+
+── G1-G2 : Annular ring (S1) ──
+  S1 inner radius   : 25.0002 mm
+  S1 outer radius   : 75.0001 mm
+  Extrusion         : 5.0 mm  (−Z)
+
+── G4-G6 : Countersink holes × 6 (S2) ──
+  Counterbore r=2.9501 cut +3.0 (+Z)
+  Through-bore r=1.6999 cut -2.0 (−Z)
+  Bolt-circle r=30.0000  count=6
+
+── G7-G8 : Rectangular boss (S3) ──
+  Centre (50.0, -31.5)  10.0×23.0 mm  +15.0 mm (+Z)
+
+── G9-G10 : Side hole (S4) ──
+  YZ plane X=55.0  r=1.6999  through-all
+
+── G11-G12 : Profile extrusions (S5) ──
+  G12_1: YZ plane X=17.0
+    Section 1 (triangle):  +13.0 mm in +X
+    Section 2 (polygon):   +5.0 mm in +X
+  G12_2: S9 cutout on XY plane Z=5.0
+    Profile: 8 vertices
+  G12_3: Extrude cut +30.0 mm in +Z
+
+── G13-G14 : Hex + circle cut on tilted plane (S6) ──
+  Tilted plane Y+Z=-23 (45°)
+  Circle r=1.7000  cut through-all
+  Hexagon cut: -2.0 mm offset, -8.0 mm depth
+
+── G15-G16 : Pentagon slot cut (S7) ──
+  YZ plane X=50.0
+  Pentagon (house shape): 5 vertices
+  Symmetric cut: ±1.5 mm in X (total 3.0 mm)
+
+── G17 : Mirror across YZ plane ──
+  Mirrors G7-G16 features: X → -X
+
+── G18 : Mirror across XZ plane ──
+  Mirrors G7-G17 features: Y → -Y
+
+── G19-G20 : Circle cut (S8) ──
+  Circle centre: (0.0001, 57.0000)  Z=0.0
+  Radius: 4.9999 mm
+  Extrude cut: 2.0 mm  (−Z)
+
+Watertight check  : True
+STL volume        : 107905.89636130439 mm³
+build123d volume  : 107937.99382490845 mm³
+
+Exported files:
+  STL  : Art1Top_Splitted_A_G_1_20.stl
+  STEP : Art1Top_Splitted_A_G_1_20.step
+============================================================

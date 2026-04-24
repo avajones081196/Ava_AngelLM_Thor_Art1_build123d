@@ -1,0 +1,17 @@
+============================================================
+0_preprocess_csvs.py  Execution Log
+Time: 2026-04-24 10:33:03
+============================================================
+
+Found 2 CSV file(s) in input folder.
+
+WROTE    S1: Fusion_Coordinates_S1.csv → Fusion_Coordinates_S1.csv
+WROTE    S2: Fusion_Coordinates_S2.csv → Fusion_Coordinates_S2.csv
+
+============================================================
+SUMMARY
+============================================================
+  Shapes skipped (already merged) : 0
+  New shapes written              : 2
+  Duplicate rows removed (total)  : 0
+============================================================

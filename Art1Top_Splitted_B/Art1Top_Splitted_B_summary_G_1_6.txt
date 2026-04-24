@@ -1,0 +1,28 @@
+============================================================
+Summary  :  Art1Top_Splitted_B_summary_G_1_6
+Guidelines covered: G1–G6
+============================================================
+
+── G1-G2 : Annular ring (S1, 3 circles) ──
+  Inner radius    : 25.0002 mm
+  Middle radius   : 35.0001 mm
+  Outer radius    : 46.9999 mm
+  Sketch plane Z  : 6.0000 mm
+  Inner-to-middle : -6.0 mm (-Z), +7.0 mm (+Z)
+  Inner-to-outer  : +7.0 mm (+Z) join
+
+── G4-G6 : Bolt holes × 6 (S2) ──
+  Hole radius      : 1.6999 mm
+  Bolt-circle r    : 30.0001 mm
+  Hole depth       : 15.0 mm (both directions)
+  Hole count       : 6
+  Start angle      : 0.0°
+
+Watertight check  : True
+STL volume        : 45416.24644972925 mm³
+build123d volume  : 45435.074775887144 mm³
+
+Exported files:
+  STL  : Art1Top_Splitted_B_G_1_6.stl
+  STEP : Art1Top_Splitted_B_G_1_6.step
+============================================================

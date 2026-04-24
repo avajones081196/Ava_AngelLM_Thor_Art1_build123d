@@ -14,16 +14,65 @@ The goal: prove that every part can be rebuilt to **near-perfect geometric accur
 
 ## ✅ Parts Completed
 
-| # | Part | Volume (mm³) | Vol Error | Sym Diff | Bounding Box | Time | Rating |
-|---|------|-------------|-----------|----------|-------------|------|--------|
-| 1 | `Art1Top_1_Stopper` | 106.8725 | 0.008% | 0.009% | ✅ PASS | — | 🟢 EXCELLENT |
-| 2 | `Art1Top_Splitted_A` | 107,906.06 | 0.023% | 0.030% | ✅ PASS | 3.5 hrs | 🟢 EXCELLENT |
+| # | Part | Volume (mm³) | Vol Error | Sym Diff | Overlap | Bounding Box | Time | Rating |
+|---|------|-------------|-----------|----------|---------|-------------|------|--------|
+| 1 | `Art1Top_1_Stopper` | 106.87 | 0.008% | 0.009% | 99.999% | ✅ PASS | 1 hr | 🟢 EXCELLENT |
+| 2 | `Art1Top_Splitted_A` | 107,906.06 | 0.023% | 0.030% | 99.973% | ✅ PASS | 3.5 hrs | 🟢 EXCELLENT |
+| 3 | `Art1Top_Splitted_B` | 45,416.29 | 0.030% | 0.065% | 99.952% | ✅ PASS | 40 min | 🟢 EXCELLENT |
 
-### 🔄 In Progress
+> **All 3 parts: 🟢 EXCELLENT across every metric.**
 
-| # | Part | Status |
-|---|------|--------|
-| 3 | `Art1Top_Splitted_B` | 🔧 In progress |
+⏱ **Total time: 5 hrs 10 min**
+
+---
+
+## 📊 Art1Top_Splitted_B — Detailed Results
+
+### What the part looks like
+
+A stepped annular ring with three concentric circles defining two regions:
+
+- **Inner ring** (r25→r35): extends both upward (+7 mm) and downward (-6 mm) from the sketch plane
+- **Outer flange** (r25→r47): extends upward (+7 mm) only
+- **6 bolt holes** (r≈1.7 mm) on a 30 mm bolt circle, evenly spaced
+
+### Guidelines breakdown (6 guidelines, G1–G6)
+
+| Guideline | Description | CSV |
+|-----------|-------------|-----|
+| G1 | Read 3 concentric circles (inner r=25, middle r=35, outer r=47) | S1 |
+| G2 | Extrude inner-to-middle -6 mm (-Z) and +7 mm (+Z); inner-to-outer +7 mm (+Z) join | S1 |
+| G3 | (Logic stage) Ring complete | — |
+| G4 | Read bolt hole circle (r≈1.7 mm at radius 30 mm) | S2 |
+| G5 | Extrude-cut hole 15 mm through-all | S2 |
+| G6 | Circular pattern × 6 around global Z axis | — |
+
+### Comparison scorecard
+
+```
+███████████████████████████████████████████████████████████
+  STL COMPARISON: Build123d  vs  Fusion 360 Original
+███████████████████████████████████████████████████████████
+
+  Build123d volume    : 45,416.29 mm³
+  Fusion 360 volume   : 45,429.81 mm³
+  Absolute difference :    −13.52 mm³
+  % error             :     0.030%      🟢 EXCELLENT
+
+  Symmetric diff      :     29.74 mm³
+  Sym diff %          :     0.065%      🟢 EXCELLENT
+  Overlap coverage    :    99.952%      🟢 EXCELLENT
+
+  Bounding box        : ✅ ALL 6 AXES PASS  (max deviation 0.015 mm)
+
+  ─────────────────────────────────────────────────────────
+  SUMMARY SCORECARD
+  ─────────────────────────────────────────────────────────
+  Volume % error          0.030%   🟢 EXCELLENT
+  Symmetric diff % error  0.065%   🟢 EXCELLENT
+  Overlap coverage       99.95%    🟢 EXCELLENT
+  Bounding box             PASS    ✅
+```
 
 ---
 
@@ -47,7 +96,7 @@ A large annular disc (inner radius 25 mm, outer radius 75 mm) with multiple feat
 | G4–G6 | Countersink holes × 6 (counterbore +3, through-bore −2, circular pattern) | S2 |
 | G7–G8 | Rectangular boss (10×23 mm, extrude +15 mm) | S3 |
 | G9–G10 | Side hole through rectangular boss | S4 |
-| G11–G12 | Wedge profile extrusions (triangle +13, polygon +5) | S5 |
+| G11–G12_1 | Wedge profile extrusions (triangle +13, polygon +5) | S5 |
 | G12_2–G12_3 | Curved cutout at wedge base (+30 mm cut) | S9 |
 | G13–G14 | Hexagon + circle cut on 45° tilted plane | S6 |
 | G15–G16 | Pentagon slot cut (±1.5 mm symmetric) | S7 |
@@ -58,28 +107,13 @@ A large annular disc (inner radius 25 mm, outer radius 75 mm) with multiple feat
 ### Comparison scorecard
 
 ```
-███████████████████████████████████████████████████████████
-  STL COMPARISON: Build123d  vs  Fusion 360 Original
-███████████████████████████████████████████████████████████
-
   Build123d volume    : 107,906.06 mm³
   Fusion 360 volume   : 107,931.29 mm³
-  Absolute difference :    −25.23 mm³
   % error             :     0.023%      🟢 EXCELLENT
 
-  Symmetric diff      :     32.88 mm³
-  Sym diff %          :     0.030%      🟢 EXCELLENT
+  Symmetric diff %    :     0.030%      🟢 EXCELLENT
   Overlap coverage    :    99.973%      🟢 EXCELLENT
-
-  Bounding box        : ✅ ALL 6 AXES PASS  (max deviation 0.022 mm)
-
-  ─────────────────────────────────────────────────────────
-  SUMMARY SCORECARD
-  ─────────────────────────────────────────────────────────
-  Volume % error          0.023%   🟢 EXCELLENT
-  Symmetric diff % error  0.030%   🟢 EXCELLENT
-  Overlap coverage       99.97%    🟢 EXCELLENT
-  Bounding box             PASS    ✅
+  Bounding box        : ✅ ALL 6 AXES PASS
 ```
 
 ---
@@ -103,13 +137,13 @@ A circular disc (radius ≈ 4.4 mm) with a raised central strip — two parallel
 ### Comparison scorecard
 
 ```
-  Build123d volume    : 106.8725 mm³
-  Fusion 360 volume   : 106.8644 mm³
+  Build123d volume    : 106.87 mm³
+  Fusion 360 volume   : 106.86 mm³
   % error             :   0.008%       🟢 EXCELLENT
 
   Symmetric diff %    :   0.009%       🟢 EXCELLENT
-  Overlap coverage    :  99.9995%      🟢 EXCELLENT
-  Bounding box        : ✅ ALL 6 AXES PASS  (max deviation 0.0007 mm)
+  Overlap coverage    :  99.999%       🟢 EXCELLENT
+  Bounding box        : ✅ ALL 6 AXES PASS
 ```
 
 ---
@@ -121,27 +155,34 @@ Each part lives in its own folder under `20260422_assign/`:
 ```
 20260422_assign/
 ├── Art1Top_1_Stopper/
-│   ├── csv_data_Art1Top_1_Stopper/        ← Raw Fusion 360 coordinate exports
-│   ├── csv_merged/                        ← Cleaned & deduplicated CSVs
-│   ├── 0_preprocess_csvs.py               ← Step 1: Clean & merge raw CSVs
-│   ├── Art1Top_1_Stopper_build123d.py     ← Step 2: Build the part
-│   ├── Art1Top_1_Stopper_compare_stl_files.py  ← Step 3: Compare vs original
-│   ├── Art1Top_1_Stopper_G_1_3.stl        ← Output: built STL
-│   ├── Art1Top_1_Stopper_G_1_3.step       ← Output: built STEP
-│   ├── Art1Top_1_Stopper_original.stl     ← Reference: Fusion 360 original
-│   └── Art1Top_1_Stopper_summary_G_1_3.txt
+│   ├── csv_data_Art1Top_1_Stopper/
+│   ├── csv_merged/
+│   ├── 0_preprocess_csvs.py
+│   ├── Art1Top_1_Stopper_build123d.py
+│   ├── Art1Top_1_Stopper_compare_stl_files.py
+│   ├── Art1Top_1_Stopper_G_1_3.stl
+│   ├── Art1Top_1_Stopper_G_1_3.step
+│   └── Art1Top_1_Stopper_original.stl
 │
-└── Art1Top_Splitted_A/
-    ├── csv_data_Art1Top_Splitted_A/
-    ├── csv_merged/                        ← S1–S9 cleaned CSVs
+├── Art1Top_Splitted_A/
+│   ├── csv_data_Art1Top_Splitted_A/
+│   ├── csv_merged/                        ← S1–S9 cleaned CSVs
+│   ├── 0_preprocess_csvs.py
+│   ├── Art1Top_Splitted_A_build123d.py    ← 20 guidelines (G1–G20)
+│   ├── Art1Top_Splitted_A_compare_stl_files.py
+│   ├── Art1Top_Splitted_A_G_1_20.stl
+│   ├── Art1Top_Splitted_A_G_1_20.step
+│   └── Art1Top_Splitted_A_original.stl
+│
+└── Art1Top_Splitted_B/
+    ├── csv_data_Art1Top_Splitted_B/
+    ├── csv_merged/                        ← S1–S2 cleaned CSVs
     ├── 0_preprocess_csvs.py
-    ├── Art1Top_Splitted_A_build123d.py    ← 20 guidelines (G1–G20)
-    ├── Art1Top_Splitted_A_compare_stl_files.py
-    ├── Art1Top_Splitted_A_G_1_20.stl
-    ├── Art1Top_Splitted_A_G_1_20.step
-    ├── Art1Top_Splitted_A_original.stl
-    ├── Art1Top_Splitted_A_summary_G_1_20.txt
-    └── Art1Top_Splitted_A_build123d_vs_original_G_1_20.txt
+    ├── Art1Top_Splitted_B_build123d.py    ← 6 guidelines (G1–G6)
+    ├── Art1Top_Splitted_B_compare_stl_files.py
+    ├── Art1Top_Splitted_B_G_1_6.stl
+    ├── Art1Top_Splitted_B_G_1_6.step
+    └── Art1Top_Splitted_B_original.stl
 ```
 
 ---
@@ -271,7 +312,7 @@ Now you can just type `buildenv` to activate.
    python PartName_compare_stl_files.py
    ```
 
-> **Port note:** OCP viewer on this machine runs on port **3940**. All scripts use `set_port(3940)`.
+> **Port note:** The OCP viewer port varies per session. Always check `OCP: XXXX` in the bottom-right corner of VS Code and match `set_port()` accordingly.
 
 ---
 
@@ -304,11 +345,10 @@ rtree
 
 ## 🗺️ Roadmap
 
-- [x] `Art1Top_1_Stopper` — 🟢 EXCELLENT (0.008% vol error)
+- [x] `Art1Top_1_Stopper` — 🟢 EXCELLENT (0.008% vol error) — 1 hr
 - [x] `Art1Top_Splitted_A` — 🟢 EXCELLENT (0.023% vol error) — 3.5 hrs
-- [ ] `Art1Top_Splitted_B` — 🔧 In progress
-- [ ] More Art1 parts...
-- [ ] Art2, Art3, Art4, Art5, Art6 parts
+- [x] `Art1Top_Splitted_B` — 🟢 EXCELLENT (0.030% vol error) — 40 min
+- [ ] `Art2BodyA_Splitted_A` — 🔧 In progress
 
 ---
 

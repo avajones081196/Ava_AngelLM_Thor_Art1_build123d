@@ -19,10 +19,84 @@ The goal: prove that every part can be rebuilt to **near-perfect geometric accur
 | 1 | `Art1Top_1_Stopper` | 106.87 | 0.008% | 0.009% | 99.999% | ✅ PASS | 1 hr | 🟢 EXCELLENT |
 | 2 | `Art1Top_Splitted_A` | 107,906.06 | 0.023% | 0.030% | 99.973% | ✅ PASS | 3.5 hrs | 🟢 EXCELLENT |
 | 3 | `Art1Top_Splitted_B` | 45,416.29 | 0.030% | 0.065% | 99.952% | ✅ PASS | 40 min | 🟢 EXCELLENT |
+| 4 | `Art2BodyA_Splitted_A` | 102,778.90 | 0.199% | 0.579% | 99.613% | ✅ PASS | 17 hrs | 🟢 EXCELLENT |
 
-> **All 3 parts: 🟢 EXCELLENT across every metric.**
+> **All 4 parts: 🟢 EXCELLENT across every metric.**
 
-⏱ **Total time: 5 hrs 10 min**
+⏱ **Total time: 22 hrs 10 min**
+
+---
+
+## 📊 Art2BodyA_Splitted_A — Detailed Results
+
+### What the part looks like
+
+The most complex part yet — a stepped teardrop body with a **60-tooth helical gear ring**:
+
+- **Stepped teardrop base**: sections 1+2 (circle + crescent) span Z=0..32; section 3 (bulge) sits on top from Z=5..32
+- **Multi-depth pockets** on top face (sections cut to depths -29, -19, -22 mm)
+- **4 small bores** (Ø3.4 mm) in bulge floor; central counterbore (Ø10 mm) and through-bore (Ø16.4 mm) clusters
+- **Two hexagonal recesses** at Z=11 (circumradius ≈ 3.35 mm)
+- **Truncated cone boss** (loft from r=18 @ Z=5 to r=12 @ Z=11), extruded to base
+- **Two pentagonal extrusions** on the YZ side face at Y=83 (joined by 6 mm in -Y)
+- **60-tooth helical gear ring**: each tooth swept along Z=13→Z=3 with 5.97° twist, patterned around global Z-axis (radial range r=57.5 → 62.92 mm)
+
+### Guidelines breakdown (31 guidelines, G1–G31)
+
+| Guideline | Description | CSV |
+|-----------|-------------|-----|
+| G1 | Read S1; sketch circle + 4 arcs at Z=32 → 3 enclosed sections | S1 |
+| G2 + G4 | **Stepped teardrop via cut-first**: full silhouette extrude Z=32→0, then Boolean cut for bulge below Z=5 | S1 |
+| G3 | (Logic stage) Base complete | — |
+| G5 | Fillet bottom-face arcs r=5 mm (skip Arc 2 r=75) | — |
+| G6–G9 | S2 cuts on top face (circle / crescent / bulge: -29 / -19 / -22 mm) | S2 |
+| G10–G11 | 4 small bores in bulge floor (-6 mm) | S3 |
+| G12–G13 | S4 single circle from bottom face (+1.1 mm) | S4 |
+| G14–G16 | S5 loft + extrude-join (truncated cone) | S5 |
+| G17–G18 | S6 holes & slot cluster on bottom face | S6 |
+| G19–G21 | S7 three sections, two depths (4 mm and 9 mm) | S7 |
+| G22–G23 | S8 two hexagon recesses at Z=11 | S8 |
+| G24–G25 | S9 two pentagon extrude-joins on YZ plane | S9 |
+| G26–G27 | S10 ring extrude-join (Z=13 → Z=2.7) | S10 |
+| G28–G29 | S11 tooth profile + S12 sweep path | S11, S12 |
+| G30 | Helical tooth via 21-slice rotated loft (twist +5.97°) | — |
+| G31 | Circular pattern × 60 around global Z-axis | — |
+
+### Comparison scorecard
+
+```
+███████████████████████████████████████████████████████████
+  STL COMPARISON: Build123d  vs  Fusion 360 Original
+███████████████████████████████████████████████████████████
+
+  Build123d volume    : 102,778.90 mm³
+  Fusion 360 volume   : 102,979.85 mm³
+  Absolute difference :    -204.77 mm³
+  % error             :     0.199%      🟢 EXCELLENT
+
+  Symmetric diff      :     596.42 mm³
+  Sym diff %          :     0.579%      🟢 EXCELLENT
+  Overlap coverage    :    99.613%      🟢 EXCELLENT
+
+  Bounding box        : ✅ ALL 6 AXES PASS  (max deviation 0.010 mm)
+
+  ─────────────────────────────────────────────────────────
+  SUMMARY SCORECARD
+  ─────────────────────────────────────────────────────────
+  Volume % error          0.199%   🟢 EXCELLENT
+  Symmetric diff % error  0.579%   🟢 EXCELLENT
+  Overlap coverage       99.61%    🟢 EXCELLENT
+  Bounding box             PASS    ✅
+```
+
+### Lessons learned (the 17-hour debug arc)
+
+This part exposed several Boolean-kernel pitfalls that the simpler Art1 parts didn't hit. The key fixes — written up as universal rules in [`build123d_short_prompts.md`](./build123d_short_prompts.md) — are:
+
+1. **Never share a sketch curve between two extrudes that get fused.** G2 + G4 originally extruded sections 1+2 and all-3-sections separately, both containing Arc 2 in their sketches. The fuse left Arc 2 as an internal seam → 14 open edges. **Fix**: build the full outer silhouette in one extrude, then Boolean-cut the bulge below Z=5.
+2. **Avoid coincident faces between cutter and host.** First cut attempt produced 1483 open edges because the cutter's side walls (Arcs 3, 4, 1) sat exactly coincident with the host's outer walls. **Fix**: replace those arcs with a generous bounding rectangle that lies entirely outside the host. Boolean only acts where they overlap, so the rectangle's overhang is geometrically free.
+3. **Z-overshoot for swept teeth.** Tooth path of exact Z=13→Z=3 produced 9 open edges where tooth end-faces coincided with the ring's top/bottom faces. **Fix**: extend path 0.05 mm past each end (Z=13.05 → Z=2.95). The 0.05 mm pokes inside the ring material and is invisible in the visible part.
+4. **Three-gate STL validator before export.** trimesh's `is_watertight=True` does NOT guarantee Fusion will accept the STL — Fusion also checks face-orientation consistency and positive signed volume. **Fix**: always run `trimesh.repair.fix_winding()` + `fix_normals()` before export, then gate on three checks: watertight + positive volume + volume matches BREP within 1%.
 
 ---
 
@@ -174,15 +248,25 @@ Each part lives in its own folder under `20260422_assign/`:
 │   ├── Art1Top_Splitted_A_G_1_20.step
 │   └── Art1Top_Splitted_A_original.stl
 │
-└── Art1Top_Splitted_B/
-    ├── csv_data_Art1Top_Splitted_B/
-    ├── csv_merged/                        ← S1–S2 cleaned CSVs
+├── Art1Top_Splitted_B/
+│   ├── csv_data_Art1Top_Splitted_B/
+│   ├── csv_merged/                        ← S1–S2 cleaned CSVs
+│   ├── 0_preprocess_csvs.py
+│   ├── Art1Top_Splitted_B_build123d.py    ← 6 guidelines (G1–G6)
+│   ├── Art1Top_Splitted_B_compare_stl_files.py
+│   ├── Art1Top_Splitted_B_G_1_6.stl
+│   ├── Art1Top_Splitted_B_G_1_6.step
+│   └── Art1Top_Splitted_B_original.stl
+│
+└── Art2BodyA_Splitted_A/
+    ├── csv_data_Art2BodyA_Splitted_A/
+    ├── csv_merged/                        ← S1–S12 cleaned CSVs
     ├── 0_preprocess_csvs.py
-    ├── Art1Top_Splitted_B_build123d.py    ← 6 guidelines (G1–G6)
-    ├── Art1Top_Splitted_B_compare_stl_files.py
-    ├── Art1Top_Splitted_B_G_1_6.stl
-    ├── Art1Top_Splitted_B_G_1_6.step
-    └── Art1Top_Splitted_B_original.stl
+    ├── Art2BodyA_Splitted_A_build123d.py  ← 31 guidelines (G1–G31)
+    ├── Art2BodyA_Splitted_A_compare_stl_files.py
+    ├── Art2BodyA_Splitted_A_G_1_31.stl
+    ├── Art2BodyA_Splitted_A_G_1_31.step
+    └── Art2BodyA_Splitted_A_original.stl
 ```
 
 ---
@@ -234,10 +318,21 @@ PartName_G_1_N.step         ← STEP output
 PartName_summary_G_1_N.txt  ← Build log
 ```
 
-**The magic line** — always applied before export to remove accumulated geometric scars:
+**Pre-export validator (since Art2BodyA_Splitted_A)** — replaces the simple watertight check, gates on three conditions:
+
 ```python
-final_solid = final_solid.clean()
+trimesh.repair.fix_winding(mesh)   # consistent CCW winding
+trimesh.repair.fix_normals(mesh)   # outward-pointing normals
+
+wt      = mesh.is_watertight
+pos_vol = mesh.volume > 0
+vol_ok  = abs(mesh.volume - brep_vol) / abs(brep_vol) < 0.01
+
+if wt and pos_vol and vol_ok:
+    mesh.export(STL_PATH)          # ship validated mesh
 ```
+
+This eliminates the *"mesh not oriented / not positive volume"* error Fusion would intermittently throw on import — Fusion checks face orientation in addition to manifoldness, and `is_watertight=True` alone doesn't guarantee that.
 
 ---
 
@@ -270,8 +365,10 @@ Ratings: 🟢 EXCELLENT / 🟡 GOOD / 🟠 ACCEPTABLE / 🔴 POOR
 python3.11 -m venv ~/Documents/ava_build123d/build123d_master_env
 source ~/Documents/ava_build123d/build123d_master_env/bin/activate
 pip install --upgrade pip
-pip install build123d==0.7.0 ocp_vscode==3.3.4 numpy-stl trimesh manifold3d rtree
+pip install build123d==0.7.0 ocp_vscode==3.3.4 numpy-stl trimesh manifold3d rtree networkx
 ```
+
+> `networkx` is optional — used by trimesh for boundary-loop stitching during mesh repair. Recommended.
 
 ### Add a handy shell alias (optional but recommended)
 
@@ -327,6 +424,10 @@ Now you can just type `buildenv` to activate.
 | `Location()` on `Plane.YZ` misplaced | `Location` uses **global** coords, not local | Use `Location((0, Y, Z))` not `Location((Y, Z, 0))` |
 | Thin surface artifact on cuts | Sketch plane sits exactly on body face | Use `both=True` to cut in both directions |
 | `Location` context manager error | `with Location(...)` not supported | Use `Plane.move(Location(...))` instead |
+| `open_edges = 14` after fuse | Two extrudes share a sketch curve → internal seam | Single outer-silhouette extrude + Boolean cut |
+| `open_edges` = 1000+ after cut | Cutter side walls coincident with host walls | Replace cutter outline with bounding rectangle outside host |
+| Fusion: *"mesh not oriented"* on import | trimesh `is_watertight` doesn't check face orientation | Always run `fix_winding` + `fix_normals` before export |
+| Script hangs mid-run | Intermediate `show()` blocking | Comment out all but final `show()` |
 
 ---
 
@@ -339,6 +440,7 @@ numpy-stl
 trimesh
 manifold3d
 rtree
+networkx          # optional — trimesh boundary-loop stitching
 ```
 
 ---
@@ -348,7 +450,8 @@ rtree
 - [x] `Art1Top_1_Stopper` — 🟢 EXCELLENT (0.008% vol error) — 1 hr
 - [x] `Art1Top_Splitted_A` — 🟢 EXCELLENT (0.023% vol error) — 3.5 hrs
 - [x] `Art1Top_Splitted_B` — 🟢 EXCELLENT (0.030% vol error) — 40 min
-- [ ] `Art2BodyA_Splitted_A` — 🔧 In progress
+- [x] `Art2BodyA_Splitted_A` — 🟢 EXCELLENT (0.199% vol error) — 17 hrs
+- [ ] Next part — 🔧 TBD
 
 ---
 

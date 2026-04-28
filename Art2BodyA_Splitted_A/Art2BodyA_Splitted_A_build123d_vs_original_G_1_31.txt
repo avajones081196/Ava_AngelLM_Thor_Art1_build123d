@@ -1,0 +1,93 @@
+
+███████████████████████████████████████████████████████████
+  STL COMPARISON: Build123d  vs  Fusion 360 Original
+  Run time  : 2026-04-28  12:30:08
+███████████████████████████████████████████████████████████
+  Build123d : Art2BodyA_Splitted_A_G_1_31.stl
+  Original  : Art2BodyA_Splitted_A_original.stl
+  Report    : Art2BodyA_Splitted_A_build123d_vs_original_G_1_31.txt
+
+  =========================================================
+  Build123d STL
+
+  =========================================================
+  File           : Art2BodyA_Splitted_A_G_1_31.stl
+  Triangles      : 272,464  (more = finer mesh = less approx error)
+  Volume         : 102771.2917 mm³
+  Center of mass : (0.000, 15.961, 8.794) mm
+  X range        : -65.0001 → 65.0001 mm
+  Y range        : -65.0002 → 96.2680 mm
+  Z range        : 0.0000 → 32.0000 mm
+
+  =========================================================
+  Fusion 360 Original STL
+
+  =========================================================
+  File           : Art2BodyA_Splitted_A_original.stl
+  Triangles      : 19,776  (more = finer mesh = less approx error)
+  Volume         : 102976.0625 mm³
+  Center of mass : (-0.002, 15.979, 8.787) mm
+  X range        : -64.9899 → 64.9899 mm
+  Y range        : -65.0000 → 96.2683 mm
+  Z range        : 0.0000 → 32.0000 mm
+
+  =========================================================
+  VOLUME COMPARISON
+
+  =========================================================
+  Metric                                   Value  Unit
+  ---------------------------------------------------------
+  Build123d volume                   102771.2917  mm³
+  Fusion volume (reference)          102976.0625  mm³
+  Absolute difference                  -204.7708  mm³  (build123d smaller)
+  % error vs original                     0.1989  %
+  Rating                         🟢 EXCELLENT
+
+  =========================================================
+  SYMMETRIC DIFFERENCE  (spatial overlap quality)
+
+  =========================================================
+  Mesh A watertight : True
+  Mesh B watertight : True
+
+  Metric                                     Value  Unit
+  ---------------------------------------------------------
+  Volume A (Build123d)                 102778.9019  mm³
+  Volume B (Fusion original)           102979.8516  mm³
+  Intersection volume                  102581.1690  mm³
+  Overlap coverage (inter/Fusion)          99.6129  %
+  ---------------------------------------------------------
+  Symmetric diff volume                   596.4154  mm³
+  Sym diff % of Fusion volume               0.5792  %
+  Rating                              🟢 EXCELLENT
+
+  =========================================================
+  BOUNDING BOX COMPARISON  (tolerance ±0.1 mm per axis)
+
+  =========================================================
+  Axis      Build123d       Fusion    Diff mm    % err  Status
+  -----------------------------------------------------------------
+  X min      -65.0001     -64.9899    -0.0102   0.008%  ✅ pass
+  X max       65.0001      64.9899    +0.0102   0.008%  ✅ pass
+  Y min      -65.0002     -65.0000    -0.0002   0.000%  ✅ pass
+  Y max       96.2680      96.2683    -0.0003   0.000%  ✅ pass
+  Z min        0.0000       0.0000    +0.0000   0.000%  ✅ pass
+  Z max       32.0000      32.0000    +0.0000   0.000%  ✅ pass
+
+  Overall bounding box : ✅ PASS
+
+  █████████████████████████████████████████████████████████
+  SUMMARY SCORECARD
+
+  █████████████████████████████████████████████████████████
+  Check                                    Score   Rating
+  -----------------------------------------------------------------
+  Volume % error                          0.199%   🟢 EXCELLENT
+  Symmetric diff % error                  0.579%   🟢 EXCELLENT
+  Overlap coverage                        99.61%   🟢 EXCELLENT
+  Bounding box                              PASS   ✅
+
+  █████████████████████████████████████████████████████████
+
+  Report saved → /Users/avajones/Documents/ava_build123d/20260422_assign/Art2BodyA_Splitted_A/Art2BodyA_Splitted_A_build123d_vs_original_G_1_31.txt
+

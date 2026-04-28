@@ -1,0 +1,136 @@
+============================================================
+Summary  :  Art2BodyA_Splitted_A_summary_G_1_31
+Guidelines covered: G1–G31
+============================================================
+
+── G1 : Profile (S1) ──
+  Circle      : r=65.000 mm at origin
+  Arc 2 (conc): r=75.001 mm
+  Arcs 1,3    : r=65.000 mm  (tangent arcs)
+  Arc 4 (top) : r=75.001 mm
+  Sketch plane Z = 5.0
+
+── G2 : Extrude sections 1+2 ──
+  Depth: -5.0 mm (-Z)
+
+── G4 : Extrude all sections ──
+  Depth: +27.0 mm (+Z) join
+
+── G5 : Fillet ──
+  Radius: 5.0 mm on bottom-face arcs 1,3,4 (Arc2 r=75 skipped)
+
+── G6 : Profile (S2, Z=32) ──
+  Circle r=62.5 at origin
+  Arc 1 (conc): r=65.000 mm
+  Arc 2 (left tangent)  : from (-40.353, 47.727) → (-34.21, 95.512)
+  Arc 3 (top connecting): from (-34.21, 95.512) → (34.21, 95.512)
+  Arc 4 (right tangent) : from (34.21, 95.512) → (40.353, 47.727)
+
+── G7 : Cut circle section ──
+  -Z depth: 29.0 mm   +Z depth: 1.0 mm
+
+── G8 : Cut adjacent crescent ──
+  -Z depth: 19.0 mm   +Z depth: 1.0 mm
+
+── G9 : Cut third/bulge section ──
+  -Z depth: 22.0 mm   +Z depth: 1.0 mm
+
+── G10 : Profile (S3) ──
+  4 circle(s):
+  3_point_circle_1           centre=(-28.5001, 73.5000)  r=1.6999  Z=10.0
+  3_point_circle_2           centre=(-28.5001, 86.5000)  r=1.6999  Z=10.0
+  3_point_circle_3           centre=(28.4999, 86.5000)  r=1.6999  Z=10.0
+  3_point_circle_4           centre=(28.4999, 73.5000)  r=1.6999  Z=10.0
+
+── G11 : Cut all S3 circles ──
+  Sketch Z=10.0 (bulge floor)  -Z depth: 6.0 mm  → holes reach Z=4.0
+
+── G12 : Profile (S4) ──
+  1 circle(s):
+  3_point_circle_1           centre=(0.0002, -54.5000)  r=4.1998  Z=0.0
+
+── G13 : Cut S4 circle ──
+  Sketch Z=0.0 (bottom face)  +Z depth: 1.1 mm  → cut reaches Z=1.1
+
+── G14 : Profile (S5) ──
+  2 circle(s):
+  3_point_circle_2           centre=(0.0003, 0.0000)  r=17.9997  Z=5.0
+  3_point_circle_1           centre=(0.0002, 0.0000)  r=11.9998  Z=11.0
+
+── G15 : Loft between S5 circles ──
+  r=17.9997 @ Z=5.0  →  r=11.9998 @ Z=11.0
+
+── G16 : Extrude-join larger circle to base ──
+  r=17.9997  Z=5.0 → Z=0  (depth: 5.0 mm -Z)  then union with base body
+
+── G17 : Profile (S6, Z=0) ──
+  Lines : 6
+  3_point_circle_1           centre=(11.0001,0.0000)  r=1.6999  d=3.3997
+  3_point_circle_2           centre=(-10.9999,0.0000)  r=1.6999  d=3.3997
+  3_point_circle_3           centre=(0.0001,0.0000)  r=4.9999  d=9.9999
+  3_point_circle_4           centre=(0.0002,0.0000)  r=8.1998  d=16.3995
+
+── G18 : Cut d≈3.4 (×2) and d≈10 circles ──
+  +Z depth: 12.0 mm   -Z depth: 0.5 mm
+
+── G19 : Profile (S7, Z=0) — three enclosed sections ──
+  6 Lines + 4 Arcs (r≈8.2008)
+  Section A (LEFT):   Lines 1-3 + Arc4 → rectangle closed by arc
+    corners: (-15.3,-3.5) (-15.3,3.5) (-7.416,3.5) arc4 (-7.416,-3.5)
+  Section B (RIGHT):  Lines 4-6 + Arc2 → rectangle closed by arc
+    corners: (7.416,3.5) (15.3,3.5) (15.3,-3.5) (7.416,-3.5) arc2
+  Section C (CENTER): Arcs 1+2+3+4 → enclosed circle r≈8.2008
+
+── G20 : Extrude-cut ALL three S7 sections ──
+  Sections A, B, C each cut +4.0 mm in +Z  (sketch at Z=0.0)
+
+── G21 : Extrude-cut center arc section only ──
+  Section C only, total 9.0 mm in +Z  (sketch at Z=0.0, cut Z=0 → Z=9)
+  Sections A & B remain at 4 mm depth; Section C reaches 9 mm depth
+
+── G22 : Profile (S8, Z=11) — two hexagons ──
+  21 lines total → 2 enclosed hexagon regions
+  RIGHT hexagon: centre=(11.000, -0.000)  circumradius=3.3498  Z=11.0
+  LEFT  hexagon: centre=(-11.000,  -0.000)  circumradius=3.3498  Z=11.0
+
+── G23 : Extrude-cut both hexagons ──
+  -Z depth: 4.0 mm  (Z=11.0 → Z=7.0)
+  +Z depth: 0.2 mm  (Z=11.0 → Z=11.2)
+
+── G24 : Profile (S9, Y=83) — two pentagon regions ──
+  RIGHT region: 5-vertex polygon  X>0  at Y=83.0
+    vertices (X,Z): [(25.0, 27.0), (32.534, 27.0), (33.534, 27.0), (33.534, 18.466), (32.534, 19.466)]
+  LEFT  region: 5-vertex polygon  X<0  at Y=83.0
+    vertices (X,Z): [(-25.0, 27.0), (-32.534, 27.0), (-33.534, 27.0), (-33.534, 18.466), (-32.534, 19.466)]
+
+── G25 : Extrude-join both S9 pentagons ──
+  Both regions extruded +6.0 mm in -Y  (Y=83.0 → Y=77.0)
+
+── G26 : Profile (S10) — two circles ──
+  2 circles
+  3_point_circle_2           centre=(-0.0002,0.0000)  r=63.5002  Z=13.0
+  3_point_circle_1           centre=(-0.0002,0.0000)  r=62.0002  Z=13.0
+
+── G27 : Extrude-join region between S10 circles ──
+  Extruded ring depth: 10.3 mm in -Z
+
+── G28 : Profile (S11) — enclosed tooth profile ──
+  18 edges (Lines/Arcs) combined into a Face at Z=13.0
+
+── G29 : Profile (S12) — sweep path ──
+  Line generated along Z axis from Z=12.95 to Z=3.05
+
+── G30 : Helical tooth sweep ──
+  Swept S11 tooth profile along S12 path with a twist angle of 5.97 degrees.
+
+── G31 : Circular Pattern ──
+  Patterned the G30 swept tooth profile 60 times around the global Z-axis.
+
+Watertight check  : True
+STL volume        : 102778.90190674244 mm³
+build123d volume  : 102787.96923762176 mm³
+
+Exported files:
+  STL  : Art2BodyA_Splitted_A_G_1_31.stl
+  STEP : Art2BodyA_Splitted_A_G_1_31.step
+============================================================

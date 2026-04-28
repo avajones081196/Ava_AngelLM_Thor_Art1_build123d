@@ -20,8 +20,9 @@ The goal: prove that every part can be rebuilt to **near-perfect geometric accur
 | 2 | `Art1Top_Splitted_A` | 107,906.06 | 0.023% | 0.030% | 99.973% | ✅ PASS | 3.5 hrs | 🟢 EXCELLENT |
 | 3 | `Art1Top_Splitted_B` | 45,416.29 | 0.030% | 0.065% | 99.952% | ✅ PASS | 40 min | 🟢 EXCELLENT |
 | 4 | `Art2BodyA_Splitted_A` | 102,778.90 | 0.199% | 0.579% | 99.613% | ✅ PASS | 17 hrs | 🟢 EXCELLENT |
+| 5 | `Art2BodyA_Splitted_B` | — | — | — | — | — | 🔧 in progress | — |
 
-> **All 4 parts: 🟢 EXCELLENT across every metric.**
+> **All 4 completed parts: 🟢 EXCELLENT across every metric.**
 
 ⏱ **Total time: 22 hrs 10 min**
 
@@ -95,7 +96,7 @@ This part exposed several Boolean-kernel pitfalls that the simpler Art1 parts di
 
 1. **Never share a sketch curve between two extrudes that get fused.** G2 + G4 originally extruded sections 1+2 and all-3-sections separately, both containing Arc 2 in their sketches. The fuse left Arc 2 as an internal seam → 14 open edges. **Fix**: build the full outer silhouette in one extrude, then Boolean-cut the bulge below Z=5.
 2. **Avoid coincident faces between cutter and host.** First cut attempt produced 1483 open edges because the cutter's side walls (Arcs 3, 4, 1) sat exactly coincident with the host's outer walls. **Fix**: replace those arcs with a generous bounding rectangle that lies entirely outside the host. Boolean only acts where they overlap, so the rectangle's overhang is geometrically free.
-3. **Z-overshoot for swept teeth.** Tooth path of exact Z=13→Z=3 produced 9 open edges where tooth end-faces coincided with the ring's top/bottom faces. **Fix**: extend path 0.05 mm past each end (Z=13.05 → Z=2.95). The 0.05 mm pokes inside the ring material and is invisible in the visible part.
+3. **Z-inset for swept teeth.** Tooth path of exact Z=13→Z=3 produced 9 open edges where tooth end-faces coincided with the ring's top/bottom faces. **Fix**: shrink path 0.05 mm at each end (Z=12.95 → Z=3.05). Each tooth ends 0.05 mm *inside* the ring at top and bottom — invisible because the ring's flat top/bottom faces project over those gaps, and the Boolean fuse is now isolated from coincident-face conflicts.
 4. **Three-gate STL validator before export.** trimesh's `is_watertight=True` does NOT guarantee Fusion will accept the STL — Fusion also checks face-orientation consistency and positive signed volume. **Fix**: always run `trimesh.repair.fix_winding()` + `fix_normals()` before export, then gate on three checks: watertight + positive volume + volume matches BREP within 1%.
 
 ---
@@ -259,14 +260,17 @@ Each part lives in its own folder under `20260422_assign/`:
 │   └── Art1Top_Splitted_B_original.stl
 │
 └── Art2BodyA_Splitted_A/
-    ├── csv_data_Art2BodyA_Splitted_A/
-    ├── csv_merged/                        ← S1–S12 cleaned CSVs
-    ├── 0_preprocess_csvs.py
-    ├── Art2BodyA_Splitted_A_build123d.py  ← 31 guidelines (G1–G31)
-    ├── Art2BodyA_Splitted_A_compare_stl_files.py
-    ├── Art2BodyA_Splitted_A_G_1_31.stl
-    ├── Art2BodyA_Splitted_A_G_1_31.step
-    └── Art2BodyA_Splitted_A_original.stl
+│   ├── csv_data_Art2BodyA_Splitted_A/
+│   ├── csv_merged/                        ← S1–S12 cleaned CSVs
+│   ├── 0_preprocess_csvs.py
+│   ├── Art2BodyA_Splitted_A_build123d.py  ← 31 guidelines (G1–G31)
+│   ├── Art2BodyA_Splitted_A_compare_stl_files.py
+│   ├── Art2BodyA_Splitted_A_G_1_31.stl
+│   ├── Art2BodyA_Splitted_A_G_1_31.step
+│   └── Art2BodyA_Splitted_A_original.stl
+│
+└── Art2BodyA_Splitted_B/                 ← 🔧 in progress
+    └── Art2BodyA_Splitted_B_original.stl  (reference from Thor repo)
 ```
 
 ---
@@ -451,7 +455,7 @@ networkx          # optional — trimesh boundary-loop stitching
 - [x] `Art1Top_Splitted_A` — 🟢 EXCELLENT (0.023% vol error) — 3.5 hrs
 - [x] `Art1Top_Splitted_B` — 🟢 EXCELLENT (0.030% vol error) — 40 min
 - [x] `Art2BodyA_Splitted_A` — 🟢 EXCELLENT (0.199% vol error) — 17 hrs
-- [ ] Next part — 🔧 TBD
+- [ ] `Art2BodyA_Splitted_B` — 🔧 in progress
 
 ---
 

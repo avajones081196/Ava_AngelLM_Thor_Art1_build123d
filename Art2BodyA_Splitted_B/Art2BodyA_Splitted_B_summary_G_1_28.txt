@@ -1,0 +1,129 @@
+============================================================
+Summary  :  Art2BodyA_Splitted_B_summary_G_1_28
+Guidelines covered: G1 to G28
+============================================================
+
+-- G1 : Profile (S1, Z=32) --
+  Inner Circle (hole) : centre=(0.000, 160.000)  r=49.000
+  Arc 1 (bottom)      : centre=(0.000, -0.001)  r=75.001
+  Arc 2 (right tang.) : centre=(102.470, 80.000)  r=65.000
+  Arc 3 (top conn.)   : centre=(0.000, 160.000)  r=65.000
+  Arc 4 (left tang.)  : centre=(-102.470, 80.000)  r=65.000
+  Sketch plane Z = 32.0
+
+-- G2 : Extrude region (outer arcs minus circle hole) --
+  Depth: -32.0 mm in -Z  (Z=32.0 -> Z=0)
+
+-- G4 : Profile (S2, Z=33) — three enclosed sections --
+  Section 1 (HOLE, NOT cut): circle r=49.000 at (0.000, 160.000)  dia=98.000
+  Section 2 (upper U-channel)
+  Section 3 (rim crescent)
+
+-- G5 : Extrude-cut Sections 2 ∪ 3 (NOT Section 1) --
+  Sketch Z = 33.0  (1 mm above body top Z=32 — Z-overshoot)
+  Cut depth: 28.0 mm in -Z   (Z=33.0 → Z=5.0)
+  Result: 5 mm floor at Z=0..5; pocket reaches body sidewalls
+
+-- G6 : Profile (S3, Z=4.9) — three enclosed sections --
+  Section 1 : circle r=1.700 at (0.000, 205.000)
+  Section 2 : rectangle (-5,201)→(5,209) MINUS Section-1 circle
+  Section 3 : slot lines+arc (top arc r=64.863 c=(-0.000, 155.621))
+  Sketch plane Z = 4.9  (0.1 mm BELOW floor top Z=5 — Z-overshoot)
+
+-- G7 : Extrude-join Section 3 (slot) --
+  Depth: +8.1 mm in +Z  (Z=4.9 → Z=13.0)
+
+-- G8 : Extrude-join Section 2 (rect - circle) --
+  Offset: +2.1 mm above sketch plane → start Z=7.0
+  Depth:  +6.0 mm in +Z  (Z=7.0 → Z=13.0)
+  Circle hole carries through Section-2 tab (Z=7.0..13.0)
+
+-- G9 : Profile (S4, Z=10) + symmetric extrude-cut --
+  S4 profile: pentagon-like outline (7 lines, closed)
+  Sketch plane Z = 10.0
+  Cut: ±1.5 mm symmetric in Z  (Z=8.5 → Z=11.5, total 3.0 mm)
+  Implementation: TWO subtract extrudes from sketch (+1.5 and -1.5)
+
+-- G10 : Circular pattern of (G6 → G9) --
+  Pattern axis: vertical at (0.0, 160.0) (centre of S1 circle)
+  Quantity: 3 instances at 0.0°, 120.0°, 240.0°
+  G7+G8 join, G9 cut applied at each rotated position
+
+-- G11 : Profile (S5, Z=25.0) — bounding box (lines+arc) + inner circle --
+  Inner circle: centre=(0.000, 215.000)  r=1.700
+  Bounding box: rectangle x=[-5, 5], y=[210, 219.791] + small step to y=220.391 + top arc
+
+-- G12 : Extrude-join BOTH S5 sections (box + circle) --
+  Depth: -12.1 mm in -Z  (Z=25.0 → Z=12.9)
+
+-- G13 : Extrude-cut S5 inner circle --
+  Depth: -12.0 mm in -Z  (Z=25.0 → Z=13.0)
+  Leaves 0.1 mm of material under the hole at the bottom of the G12 prism
+
+-- G14 : Profile (S6, Z=20.5) — closed loop of lines --
+  S6 profile: 7 lines forming a single closed loop
+
+-- G15 : Extrude-cut S6 profile symmetrically --
+  Cut: ±1.5 mm symmetric in Z  (Z=19.0 → Z=22.0, total 3.0 mm)
+  Implementation: TWO subtract extrudes from sketch (+1.5 and -1.5)
+
+-- G16 : Profile (S7, Z=-1.0) — circles bucketed by diameter --
+  Circles dia ≈ 8.4: 2 found
+  Circles dia ≈ 5.9: 4 found
+  Circles dia ≈ 3.4: 4 found
+
+-- G17 : Extrude-cut dia ≈ 8.4 circles --
+  Depth: +2.1 mm in +Z  (Z=-1.0 → Z=1.1)
+  Produces 1.1 mm-deep counterbore-style holes through floor at Z=0
+
+-- G18 : Extrude-cut dia ≈ 5.9 circles --
+  Depth: +3.9 mm in +Z  (Z=-1.0 → Z=2.9)
+
+-- G19 : Extrude-cut dia ≈ 3.4 circles --
+  Depth: +8.0 mm in +Z  (Z=-1.0 → Z=7.0)
+
+-- G20 : Profile (S8, YZ-plane at X=0.0) — circle --
+  Circle: centre_Y=99.850, centre_Z=8.000  r=1.700
+
+-- G21 : Extrude-cut S8 circle symmetrically along X --
+  Cut: ±50 mm symmetric in X  (through-bore along X)
+  Implementation: TWO subtract extrudes from YZ sketch (+50 and -50)
+
+-- G22 : Profile (S9, YZ-plane at X=-9.0) — TWO closed loops --
+  Auto-grouped into 2 loops by walking endpoints
+  Loop A (Y range 103.7→108.7): 6 lines
+  Loop B (other):                6 lines
+
+-- G23 : Extrude-join Loop A by 30 mm in -X --
+  Sketch at X=-9.0 → solid extends toward X=-39.0
+
+-- G24 : Extrude-join Loop B by 26 mm in -X --
+  Sketch at X=-9.0 → solid extends toward X=-35.0
+
+-- G25 : Profile (S10, Z=8.5) — single enclosed region --
+  S10 profile: 7 lines forming a single closed loop
+
+-- G26 : Extrude-cut S10 profile by 3.5 mm in -Z --
+  Cut: Z=8.5 → Z=5.0
+
+-- G27 : Mirror G22-G26 across the global YZ plane --
+  S9 features re-built at X=9.0 (mirror of -9.0)
+    Loop A extruded +30 mm in +X
+    Loop B extruded +26 mm in +X
+  S10 feature: every X coordinate negated, then cut -3.5 mm in -Z
+
+-- G28 : Fillet 3 bottom-face outer arcs (r≈65) at z=0 --
+  Selection: bottom face via faces().sort_by(Axis.Z)[0], filter edges by radius ≈65
+  Fillet radius applied: 4.99 (literal 5.0 fails OCC kernel; 0.01 mm difference
+    is below STL tolerance, visually identical)
+  Skipped Arc 1 (r=75 bottom of teardrop)
+
+-- G3 : Export --
+  STL  : Art2BodyA_Splitted_B_G_1_28.stl
+  STEP : Art2BodyA_Splitted_B_G_1_28.step
+
+Watertight check  : True
+Open edges        : 0
+STL volume        : 88495.38916429707 mm^3
+build123d volume  : 88495.45758018733 mm^3
+============================================================

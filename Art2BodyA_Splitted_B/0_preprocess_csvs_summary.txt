@@ -1,0 +1,25 @@
+============================================================
+0_preprocess_csvs.py  Execution Log
+Time: 2026-04-29 15:49:11
+============================================================
+
+Found 10 CSV file(s) in input folder.
+
+SKIPPED  S1: already in csv_merged — not reprocessed.
+SKIPPED  S2: already in csv_merged — not reprocessed.
+SKIPPED  S3: already in csv_merged — not reprocessed.
+SKIPPED  S4: already in csv_merged — not reprocessed.
+SKIPPED  S5: already in csv_merged — not reprocessed.
+SKIPPED  S6: already in csv_merged — not reprocessed.
+SKIPPED  S7: already in csv_merged — not reprocessed.
+SKIPPED  S8: already in csv_merged — not reprocessed.
+SKIPPED  S9: already in csv_merged — not reprocessed.
+WROTE    S10: Fusion_Coordinates_S10.csv → Fusion_Coordinates_S10.csv
+
+============================================================
+SUMMARY
+============================================================
+  Shapes skipped (already merged) : 9
+  New shapes written              : 1
+  Duplicate rows removed (total)  : 0
+============================================================

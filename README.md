@@ -20,11 +20,100 @@ The goal: prove that every part can be rebuilt to **near-perfect geometric accur
 | 2 | `Art1Top_Splitted_A` | 107,906.06 | 0.023% | 0.030% | 99.973% | ✅ PASS | 3.5 hrs | 🟢 EXCELLENT |
 | 3 | `Art1Top_Splitted_B` | 45,416.29 | 0.030% | 0.065% | 99.952% | ✅ PASS | 40 min | 🟢 EXCELLENT |
 | 4 | `Art2BodyA_Splitted_A` | 102,778.90 | 0.199% | 0.579% | 99.613% | ✅ PASS | 17 hrs | 🟢 EXCELLENT |
-| 5 | `Art2BodyA_Splitted_B` | — | — | — | — | — | 🔧 in progress | — |
+| 5 | `Art2BodyA_Splitted_B` | 88,495.39 | 0.058% | 0.283% | 99.887% | ✅ PASS | 10 hrs | 🟢 EXCELLENT |
 
-> **All 4 completed parts: 🟢 EXCELLENT across every metric.**
+> **All 5 completed parts: 🟢 EXCELLENT across every metric.**
 
-⏱ **Total time: 22 hrs 10 min**
+⏱ **Total time: 32 hrs 10 min**
+
+---
+
+## 📊 Art2BodyA_Splitted_B — Detailed Results
+
+### What the part looks like
+
+A teardrop-shaped body with the hole positioned at the **top** of the teardrop (not at the bulge like Splitted_A) — essentially the geometric counterpart to Splitted_A:
+
+- **Teardrop outer body** (S1): 4 outer arcs (Arc 1 r=75 bottom, Arc 2/Arc 4 r=65 tangents, Arc 3 r=65 top) with a Ø98 mm through-hole at (0, 160). Extruded -32 mm in Z.
+- **U-channel pocket** (S2 / G5): irregular crescent + tongue region between Arc 1 of S2 (r=60 inner) and the body's outer boundary, cut 28 mm deep from Z=33 → Z=5, leaving a 5 mm floor.
+- **Patterned cluster × 3** (S3, S4 / G6–G10): each instance contains a slot tab (G7), a rectangle-with-hole tab (G8), and a pentagon-shaped through-window cut (G9). Pattern axis: vertical at (0, 160) — centre of the S1 hole.
+- **Bounding-box-with-circle feature** (S5 / G11–G13): rect + arc bounding box plus an inner circle, extruded -12.1 mm; circle then cut -12.0 mm leaving a 0.1 mm floor under the hole.
+- **Symmetric line-loop cut** (S6 / G14–G15): closed line profile cut ±1.5 mm in Z.
+- **Three diameter-bucketed hole sets** (S7 / G16–G19): Ø8.4 / Ø5.9 / Ø3.4 circles cut to depths 2.1 / 3.9 / 8 mm respectively from Z=-1.
+- **YZ-plane through-bore** (S8 / G20–G21): single circle cut symmetrically ±50 mm along X.
+- **Two YZ-plane prisms** (S9 / G22–G24): two enclosed loops auto-grouped from line endpoints, extrude-joined 30 mm and 26 mm in -X.
+- **XY-plane line cutout** (S10 / G25–G26): closed line profile cut 3.5 mm in -Z.
+- **YZ-plane mirror** (G27): everything from G22–G26 mirrored across the global YZ plane (S9 prisms re-built at +X with positive extrudes; S10 cutout with X-coords negated).
+- **Bottom-face fillets** (G28): 4.99 mm fillet on the three r=65 outer arcs at z=0 (skip Arc 1 r=75). The 4.99 vs 5.0 sidesteps an OCC kernel edge case where exactly r=5 fails on this geometry — 0.01 mm difference is below STL tolerance.
+
+### Guidelines breakdown (G1–G10 + G28; G11–G27 are part of the body construction within the BuildPart context)
+
+| Guideline | Description | CSV |
+|-----------|-------------|-----|
+| G1 | Read S1; circle + 4 arcs at Z=32 → teardrop outline + Ø98 hole | S1 |
+| G2 | Extrude outer-arcs-minus-hole region -32 mm in Z | S1 |
+| G3 | (Logic stage) export STL/STEP at LAST stage | — |
+| G4 | Read S2; identify 3 enclosed sections (hole, U-channel, rim crescent) | S2 |
+| G5 | Extrude-cut Sections 2 ∪ 3 by -28 mm; sketch at Z=33 (1 mm overshoot) | S2 |
+| G6 | Read S3 + S4; parse 3 sections of S3 + pentagon of S4 | S3, S4 |
+| G7 | Extrude-join slot section (Section 3) +8.1 mm in +Z; sketch at Z=4.9 (0.1 mm overshoot into floor) | S3 |
+| G8 | Extrude-join rectangle-minus-circle (Section 2) +6 mm at offset Z=7 | S3 |
+| G9 | Extrude-cut pentagon (S4) symmetrically ±1.5 mm at Z=10 | S4 |
+| G10 | Circular pattern of (G6→G9) × 3 at 0°, 120°, 240° around (0, 160) Z-axis | — |
+| G11 | Read S5; bounding-box (lines + arc) + inner circle | S5 |
+| G12 | Extrude-join BOTH S5 sections -12.1 mm in -Z | S5 |
+| G13 | Extrude-cut S5 inner circle -12.0 mm in -Z (leaves 0.1 mm floor) | S5 |
+| G14 | Read S6; closed line loop | S6 |
+| G15 | Extrude-cut S6 profile symmetrically ±1.5 mm in Z | S6 |
+| G16 | Read S7; bucket circles by Ø8.4 / Ø5.9 / Ø3.4 | S7 |
+| G17 | Extrude-cut Ø8.4 circles +2.1 mm in +Z (sketch at Z=-1) | S7 |
+| G18 | Extrude-cut Ø5.9 circles +3.9 mm in +Z | S7 |
+| G19 | Extrude-cut Ø3.4 circles +8 mm in +Z | S7 |
+| G20 | Read S8; circle on YZ plane | S8 |
+| G21 | Extrude-cut S8 circle symmetrically ±50 mm in X (through-bore) | S8 |
+| G22 | Read S9; auto-group lines into 2 closed loops on YZ plane at X=-9 | S9 |
+| G23 | Extrude-join Loop A (Y ∈ [103.7, 108.7]) -30 mm in -X | S9 |
+| G24 | Extrude-join Loop B -26 mm in -X | S9 |
+| G25 | Read S10; closed line loop on XY plane at Z=8.5 | S10 |
+| G26 | Extrude-cut S10 profile -3.5 mm in -Z | S10 |
+| G27 | Mirror G22–G26 across global YZ plane (S9 re-built at +X with +X extrudes; S10 X-coords negated) | — |
+| G28 | Fillet 3 bottom-face outer arcs (r≈65) at z=0 with r=4.99 mm | — |
+
+### Comparison scorecard
+
+```
+███████████████████████████████████████████████████████████
+  STL COMPARISON: Build123d  vs  Fusion 360 Original
+███████████████████████████████████████████████████████████
+
+  Build123d volume    : 88,495.39 mm³
+  Fusion 360 volume   : 88,444.34 mm³
+  Absolute difference :     +51.05 mm³  (build123d larger)
+  % error             :     0.058%      🟢 EXCELLENT
+
+  Symmetric diff      :    250.53 mm³
+  Sym diff %          :     0.283%      🟢 EXCELLENT
+  Overlap coverage    :    99.887%      🟢 EXCELLENT
+
+  Bounding box        : ✅ ALL 6 AXES PASS  (max deviation 0.010 mm)
+
+  ─────────────────────────────────────────────────────────
+  SUMMARY SCORECARD
+  ─────────────────────────────────────────────────────────
+  Volume % error          0.058%   🟢 EXCELLENT
+  Symmetric diff % error  0.283%   🟢 EXCELLENT
+  Overlap coverage       99.89%    ✅
+  Bounding box             PASS    ✅
+```
+
+### Lessons learned (the 10-hour debug arc)
+
+This part hammered home several Boolean-kernel lessons that build on (and refine) the rules from Splitted_A:
+
+1. **Z-overshoot beats radial offset, every time.** When a cutter or join feature shares a sketch boundary with the host body, the wrong fix is to nudge the radius by 0.01 mm — that creates a sub-tolerance sliver wall that survives `.clean()` but breaks STL tessellation. The right fix is to **extend the cutter perpendicular to the shared face by 1 mm** (e.g. sketch the cutter at Z=33 when the body top is Z=32). The overshoot lives in empty space; the 1 mm margin is 2000× the STL tolerance, well clear of any numerical edge case. Used this for G5 (cut), G7/G13 (join into floor), and the G15 symmetric cut.
+2. **For multiple enclosed regions sharing internal dividers, build the union.** S2 had three sections with three "T-junction" divider edges. Drawing each section separately would have made build123d struggle with the shared edges. Instead I traced the **outer perimeter of (Section 2 ∪ Section 3)** as one closed loop — the dividers become interior to the union and vanish. Verified via Euler's formula (V−E+F=2 → exactly 2 bounded faces in the planar graph, confirming "three enclosed sections" reading).
+3. **Fillet is the one place where 4.99 vs 5.00 actually matters.** OCC's `fillet()` rejected exactly r=5.0 on the three r=65 bottom arcs (binary search converged: r=4.999... works, r=5.000 fails). Unlike sketch-coincident cases where 0.01 mm offsets create slivers, **fillet is a face-blend operation** — the resulting tangent surface is geometrically clean regardless of the 0.01 mm difference. Visually and dimensionally indistinguishable from r=5.0; OCC just numerically prefers it.
+4. **Volume diagnostic libraries don't all agree.** Initial compare report showed a phantom 0.55% volume error because `numpy-stl`'s `get_mass_properties()` integrates signed tetrahedra straight from raw STL triangles — and tessellation of curved fillet surfaces sometimes emits a handful of inverted triangles. trimesh normalizes triangle winding on load and gave the correct value (matching build123d's BREP volume to 4 decimal places). **Use trimesh consistently for all mesh metrics**, not numpy-stl. After fixing the compare script, the real volume error dropped from 0.55% to 0.058% — 10× better.
 
 ---
 
@@ -259,7 +348,7 @@ Each part lives in its own folder under `20260422_assign/`:
 │   ├── Art1Top_Splitted_B_G_1_6.step
 │   └── Art1Top_Splitted_B_original.stl
 │
-└── Art2BodyA_Splitted_A/
+├── Art2BodyA_Splitted_A/
 │   ├── csv_data_Art2BodyA_Splitted_A/
 │   ├── csv_merged/                        ← S1–S12 cleaned CSVs
 │   ├── 0_preprocess_csvs.py
@@ -269,8 +358,15 @@ Each part lives in its own folder under `20260422_assign/`:
 │   ├── Art2BodyA_Splitted_A_G_1_31.step
 │   └── Art2BodyA_Splitted_A_original.stl
 │
-└── Art2BodyA_Splitted_B/                 ← 🔧 in progress
-    └── Art2BodyA_Splitted_B_original.stl  (reference from Thor repo)
+└── Art2BodyA_Splitted_B/
+    ├── csv_data_Art2BodyA_Splitted_B/
+    ├── csv_merged/                        ← S1–S10 cleaned CSVs
+    ├── 0_preprocess_csvs.py
+    ├── Art2BodyA_Splitted_B_build123d.py  ← G1–G10 + G28 (G11–G27 in body construction)
+    ├── Art2BodyA_Splitted_B_compare_stl_files.py
+    ├── Art2BodyA_Splitted_B_G_1_28.stl
+    ├── Art2BodyA_Splitted_B_G_1_28.step
+    └── Art2BodyA_Splitted_B_original.stl
 ```
 
 ---
@@ -353,6 +449,8 @@ Compares the built STL against the original Fusion 360 STL across four metrics:
 
 Ratings: 🟢 EXCELLENT / 🟡 GOOD / 🟠 ACCEPTABLE / 🔴 POOR
 
+> **⚠ Important — use `trimesh` consistently for volume.** Earlier versions of the compare script used `numpy-stl`'s `get_mass_properties()` for the headline volume reading and `trimesh` for the symmetric-difference section, which gave **two different volumes for the same file** on meshes with many curved fillet faces (Splitted_B initially showed a phantom 0.55% error this way). Cause: numpy-stl integrates signed tetrahedra straight from raw STL triangles, while trimesh normalizes triangle winding on load. Fix: replace the `from stl import mesh` reading with `trimesh.load(file).volume` everywhere — apples-to-apples comparison.
+
 ---
 
 ## 🛠️ Environment Setup
@@ -432,6 +530,9 @@ Now you can just type `buildenv` to activate.
 | `open_edges` = 1000+ after cut | Cutter side walls coincident with host walls | Replace cutter outline with bounding rectangle outside host |
 | Fusion: *"mesh not oriented"* on import | trimesh `is_watertight` doesn't check face orientation | Always run `fix_winding` + `fix_normals` before export |
 | Script hangs mid-run | Intermediate `show()` blocking | Comment out all but final `show()` |
+| Sliver wall after sketch-coincident cut | Tried 0.01 mm radial offset to avoid coincidence | Use Z-overshoot instead — extend cutter ≥1 mm in extrude direction |
+| `fillet(r=5.0)` rejected on tangent arcs | OCC kernel numerical edge case at exact radius | Use 4.99 — face-blend op, 0.01 mm difference is below STL tolerance |
+| Compare script reports 0.5% phantom volume error | numpy-stl + trimesh disagree on filleted meshes | Use `trimesh.load(f).volume` consistently in compare script |
 
 ---
 
@@ -455,7 +556,7 @@ networkx          # optional — trimesh boundary-loop stitching
 - [x] `Art1Top_Splitted_A` — 🟢 EXCELLENT (0.023% vol error) — 3.5 hrs
 - [x] `Art1Top_Splitted_B` — 🟢 EXCELLENT (0.030% vol error) — 40 min
 - [x] `Art2BodyA_Splitted_A` — 🟢 EXCELLENT (0.199% vol error) — 17 hrs
-- [ ] `Art2BodyA_Splitted_B` — 🔧 in progress
+- [x] `Art2BodyA_Splitted_B` — 🟢 EXCELLENT (0.058% vol error) — 10 hrs
 
 ---
 
